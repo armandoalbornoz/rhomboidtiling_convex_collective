@@ -1,0 +1,4 @@
+/home/armando-albornoz/orderkdelaunay/cpp/CMakeFiles/orderk.dir
+/home/armando-albornoz/orderkdelaunay/cpp/CMakeFiles/tests.dir
+/home/armando-albornoz/orderkdelaunay/cpp/CMakeFiles/edit_cache.dir
+/home/armando-albornoz/orderkdelaunay/cpp/CMakeFiles/rebuild_cache.dir
