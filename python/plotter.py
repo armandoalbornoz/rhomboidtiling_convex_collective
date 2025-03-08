@@ -1,4 +1,8 @@
 import itertools
+
+import matplotlib
+matplotlib.use('Qt5Agg')
+
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d as a3
@@ -173,3 +177,5 @@ class Plotter3D(Plotter):
                             self._points[i][2], str(i))
 
         plt.show()
+
+
