@@ -33,10 +33,10 @@ class Plotter:
         self._orderk_delaunay = orderk_delaunay
 
         # Whether to draw a label for each vertex
-        self.draw_labels = True
+        self.draw_labels = False
 
         # Whether to draw a label for each vertex
-        self.draw_input_points = True
+        self.draw_input_points = False
 
         # colors of the cells of each generation
         color_firstgen_cell = colors.rgb2hex((1.0, 0.0, 0.0))
@@ -88,9 +88,7 @@ class Plotter2D(Plotter):
                 ax.add_artist(line)
 
         # order-k points
-        centroids = np.array([np.sum(
-              [self._points[i] for i in vertex], axis=0)/order
-                    for vertex in vertices])
+        centroids = np.array([np.sum([self._points[i] for i in vertex], axis=0)/order for vertex in vertices])
         ax.plot(centroids[:,0], centroids[:,1], 'o', color="black")
         if self.draw_labels:
             for c, v in zip(centroids, vertices):
