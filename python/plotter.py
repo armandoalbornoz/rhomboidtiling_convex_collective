@@ -60,12 +60,12 @@ class Plotter2D(Plotter):
     def __init__(self, points, orderk_delaunay):
         super().__init__(points, orderk_delaunay)
 
-    def draw(self, order):
+    def draw(self, order, ax=None):
         vertices = self._orderk_delaunay.diagrams_vertices[order-1]
         cells = self._orderk_delaunay.diagrams_cells[order-1]
         generations = self._orderk_delaunay.diagrams_generations[order-1]
 
-        ax = plt.gca()
+        ax = ax or plt.gca()
         ax.cla()
         # Draw cells stemming from barycentric subdivisions of older cells.
         # Either new_nextgen_cells or triangulated_cells is empty, depending on

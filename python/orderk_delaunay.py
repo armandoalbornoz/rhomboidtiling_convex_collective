@@ -74,7 +74,7 @@ class OrderKDelaunay:
 
     def _compute_order_1(self):
         # Get first order Delaunay mosaic as lower convex hull of the lifts
-        chull = scipy.spatial.ConvexHull(self.lifts, qhull_options='Qs')
+        chull = scipy.spatial.ConvexHull(self.lifts, qhull_options='Qs QJ')
         # chull.equations[i][dimension] < 0 means only taking the
         # lower convex hull of the lifts
         simplices = [chull.simplices[i] for i in range(len(chull.simplices))
@@ -137,7 +137,7 @@ class OrderKDelaunay:
               [self.lifts[i] for i in new_vertex], axis=0) / k 
                     for new_vertex in new_vertices])
 
-        chull = scipy.spatial.ConvexHull(new_lifts, qhull_options='Qs')
+        chull = scipy.spatial.ConvexHull(new_lifts, qhull_options='Qs QJ')
         # Compute the simplices of the triangulated order-k Delaunay mosaic,
         # which is the lower convex hull of these centroids.
         # Each simplex is a tuple of integers, these integers are indices into
