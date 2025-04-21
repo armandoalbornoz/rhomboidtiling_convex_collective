@@ -1,7 +1,7 @@
 import itertools
 
 import matplotlib
-matplotlib.use('Qt5Agg')
+matplotlib.use('Agg')
 
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt

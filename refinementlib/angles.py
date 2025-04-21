@@ -1,8 +1,11 @@
+import matplotlib
+matplotlib.use('Agg')
+
 import numpy as np
 import matplotlib.pyplot as plt
-from orderk_delaunay import OrderKDelaunay
+from rhomboidtiling_convex_collective.refinementlib.orderk_delaunay import OrderKDelaunay
 from matplotlib.animation import FuncAnimation
-from rhomboidtiling_convex_collective.python.plotter import Plotter2D
+from rhomboidtiling_convex_collective.refinementlib.plotter import Plotter2D
 from scipy.spatial import ConvexHull
 import triangle as tr
 
@@ -82,7 +85,7 @@ def compute_triangle_angles_refinement(points, vertices, triangles):
     return triangle_angles
 
 
-def refinement_histogram(triangle_angles, ax, bins=50, color='skyblue'):
+def refinement_histogram(triangle_angles, ax, bins=180, color='skyblue'):
     all_angles = []
     for entry in triangle_angles:
         all_angles.extend(entry["angles_deg"])
