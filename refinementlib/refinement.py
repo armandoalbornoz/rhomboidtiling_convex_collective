@@ -1,12 +1,9 @@
-# rhomboidtiling_convex_collective/refinementlib/refinement.py
 
 import matplotlib
 matplotlib.use('Agg')  # non-interactive, no Qt required
 
 import io
-import os
-import tempfile
-
+import base64
 import triangle as tr
 import numpy as np
 import matplotlib.pyplot as plt
@@ -104,21 +101,43 @@ def animate_refinement(refinement_steps, original_points, min_angle):
     return FuncAnimation(fig, update, frames=len(refinement_steps), interval=500, repeat=False)
 
 
-def make_refinement_gif(refinement_steps, original_points, min_angle, fps=2):
-    ani = animate_refinement(refinement_steps, original_points, min_angle)
+def get_refinement_frames(refinement_steps, original_points, min_angle):
+    frames = []
+    for mesh in refinement_steps:
+        fig = plt.figure(figsize=(14, 10))
+        gs = plt.GridSpec(2, 2, height_ratios=[2, 1], hspace=0.5, wspace=0.3)
 
-    with tempfile.NamedTemporaryFile(suffix='.gif', delete=False) as tmp: # matplotlib requires a temp file
-        tmp_path = tmp.name
+        ax1 = fig.add_subplot(gs[0, 0])
+        ax2 = fig.add_subplot(gs[0, 1])
+        ax_hist1 = fig.add_subplot(gs[1, 0])
+        ax_hist2 = fig.add_subplot(gs[1, 1])
 
-    writer = PillowWriter(fps=fps)
-    ani.save(tmp_path, writer=writer)
-    plt.close(ani._fig)
+        pts = mesh["vertices"]
+        steiner_count = len(pts) - len(original_points)
 
-    buf = io.BytesIO()
-    with open(tmp_path, 'rb') as f:
-        buf.write(f.read())
-    buf.seek(0)
+        order1frame = OrderKDelaunay(pts, order=1)
+        Plotter2D(pts, order1frame).draw(order=1, ax=ax1)
+        ax1.set_title(f"Order-1 | Steiner: {steiner_count}")
+        angles1 = compute_triangle_angles(pts, order1frame.diagrams_vertices[0], order1frame.diagrams_simplices[0])
+        refinement_histogram(angles1, ax_hist1)
 
-    os.remove(tmp_path)
+        # order‑2
+        order2frame = OrderKDelaunay(pts, order=2)
+        Plotter2D(pts, order2frame).draw(order=2, ax=ax2)
+        ax2.set_title(f"Order-2 | Steiner: {steiner_count}")
+        angles2 = compute_triangle_angles(pts, order2frame.diagrams_vertices[1], order2frame.diagrams_simplices[1])
+        refinement_histogram(angles2, ax_hist2)
 
-    return buf
+        buf = io.BytesIO() # png of figure to mem
+        fig.savefig(buf, format='png')
+        plt.close(fig)
+        buf.seek(0)
+
+        # base64 encoding to array
+        data_uri = (
+          "data:image/png;base64,"
+          + base64.b64encode(buf.read()).decode('ascii')
+        )
+        frames.append(data_uri)
+
+    return frames # send array thru api animate endpoint, port 5000

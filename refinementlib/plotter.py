@@ -102,7 +102,7 @@ class Plotter2D(Plotter):
                 for i in range(len(self._points)):
                     ax.text(self._points[i][0], self._points[i][1], str(i))
 
-        plt.show()
+        #plt.show()
 
 
 class Plotter3D(Plotter):
@@ -176,6 +176,6 @@ class Plotter3D(Plotter):
                     ax.text(self._points[i][0], self._points[i][1],
                             self._points[i][2], str(i))
 
-        plt.show()
+        #plt.show()
 
 
