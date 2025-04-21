@@ -65,8 +65,10 @@ class Plotter2D(Plotter):
         cells = self._orderk_delaunay.diagrams_cells[order-1]
         generations = self._orderk_delaunay.diagrams_generations[order-1]
 
-        ax = ax or plt.gca()
-        ax.cla()
+        if ax is None:
+            ax = plt.gca()
+        else:
+            ax.cla()
         # Draw cells stemming from barycentric subdivisions of older cells.
         # Either new_nextgen_cells or triangulated_cells is empty, depending on
         # whether 'triangulate' is True or False.
@@ -83,7 +85,7 @@ class Plotter2D(Plotter):
             ax.add_patch(p)
             for pair in itertools.combinations(vxs, 2):
                 pair = np.array(pair)
-                line = plt.Line2D(pair[:, 0], pair[:, 1], 
+                line = plt.Line2D(pair[:, 0], pair[:, 1],
                       color=self.colors_cells[gen-1], linewidth = 1.0)
                 ax.add_artist(line)
 
